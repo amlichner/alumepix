@@ -1,0 +1,7 @@
+{%- case settings.product_default_template -%}
+  {%- when 'simple' 	-%}{% section 'product-simples' %}
+  {%- when 'gallery' 	-%}{% section 'product-gallery' %}
+  {%- when 'square' 	-%}{% section 'product-square' %}
+  {%- when 'slider' 	-%}{% section 'product-slider' %}
+  {%- else -%} 			   {% section 'product-classic' %}
+{%- endcase -%} 

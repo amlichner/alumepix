@@ -1,0 +1,108 @@
+<style>
+
+#navbar {
+border: 1px solid rgba(117,144,169,.25);
+    padding:  0;
+  position: fixed;
+  top: -300px;
+  width: 100%;
+  display: block;
+  transition: top 0.3s;
+  left:0;
+}
+
+
+</style>
+<style>
+
+  ul.menu-list .active a {
+    background: transparent !important;
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="header-main">
+  <div class="row header-content container">
+    <div class="wrap-header-left col-md-3 ">
+      {% include 'include-logo' %}      
+    </div>
+    {% if section.settings.search and settings.show_search %}
+      <div class="wrap-header-center col-md-5">
+        <div class="searchbox" id="header-search">{% include 'layer-search-modal' ,type: 'search_template'  %}</div>
+      </div>
+    {% endif %}
+    <div class="wrap-header-right col-md-4">
+      <div class="header-icons">
+       {% include 'include-header-icons' %}
+      </div>
+    </div>
+  </div>
+<div class="head-bg-color"style="background:{{section.settings.head_bg}}">
+  <div class="row header-marg container">
+
+    <div class="col-md-12">
+      {% unless section.settings.nav_linklist == blank %}
+        <div class="horizontal-menu">
+          <div class="sidemenu-holder">
+            <nav class="navbar navbar-expand-lg">
+              <div class="collapse navbar-collapse">
+                <ul class="menu-list {{section.settings.menu_align}}">
+                  {% for l in linklists[section.settings.nav_linklist ].links %}
+                    {% include 'nav-link' %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+      {% endunless %}
+    </div>
+  {% if  section.settings.show_sticky_bar %}
+    <div id="navbar"style="background:{{section.settings.sticky_bg}}">
+     <div class="row header-marg new container">
+       
+  <div class="col-md-3 col-lg-2 col-sm-12 ">
+    {% include 'include-logo' %}  
+  </div>
+      <div class="col-lg-8 col-md-6 col-sm-12 text-right">
+      {% unless section.settings.nav_linklist == blank %}
+        <div class="horizontal-menu">
+          <div class="sidemenu-holder">
+            <nav class="navbar navbar-expand-lg">
+              <div class="collapse navbar-collapse">
+                <ul class="menu-list {{section.settings.menu_align}}">
+                  {% for l in linklists[section.settings.nav_linklist ].links %}
+                    {% include 'nav-link' %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+      {% endunless %}
+    </div>
+
+
+        <div class="col-md-3 col-lg-2 col-sm-12 col-12">
+          {% include 'include-header-icons-stick' %}
+  </div>
+    </div>
+  </div>
+     {% endif %}
+  </div>
+</div>
+</div>
+
+<script>
+// When the user scrolls down 20px from the top of the document, slide down the navbar
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+     if ($(window).scrollTop() >= 300) {
+ 
+    document.getElementById("navbar").style.top = "0";
+  } else {
+    document.getElementById("navbar").style.top = "-50px";
+  }
+}
+
+</script>

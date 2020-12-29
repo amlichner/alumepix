@@ -1,0 +1,690 @@
+
+<style>
+.offer-head{
+  background-color:{{section.settings.spcl-bg-color}};
+  color:{{section.settings.spcl-color}};
+  font-size:{{section.settings.spcl-size}}px;
+      max-width: max-content;
+    margin: auto;
+    margin-bottom: 12px;
+    padding: 5px 8px;
+}
+  .off-sale1{
+    color:{{section.settings.off-color}};
+  font-size:85px ;
+    margin-bottom: 10px;
+    font-family: playfair;
+  }
+    .off-sale1 span{
+  font-size:{{section.settings.off-span-size}}px;
+  }
+  .offer-text{
+        color:{{section.settings.sale-color}};
+  font-size:{{section.settings.sale-size}}px;
+        font-weight: 700;
+  }
+  .side-button{
+      color:{{section.settings.btn-color}};
+  font-size:{{section.settings.btn-size}}px;
+        border: 1px solid black;
+    border-radius: 20px;
+  }
+
+ 
+    
+     }
+  
+
+</style>
+<div class="header-con text-center">
+  <p class="sec-head text-center uppercase bold">{{section.settings.head}}</p>
+<h1 class="feat text-center">{{section.settings.title1}}</h1>
+</div>
+{% if section.settings.boxed_layout %}{% assign _layout = 'boxed' %}{% else %}{% assign _layout = 'full' %}{% endif %}
+{% if section.settings.carousel_layout %}{% assign _type = 'carousel' %}{% else %}{% assign _type = 'row' %}{% endif %}
+
+{% assign _lazyload            = settings.use_lazyload %}
+{% assign _text_align          = section.settings.text_align %}
+{% assign _padding_item        = section.settings.padding_item %}
+{% assign _total_items         = section.settings.total_items %}
+{% assign middle_index         = section.settings.total_items | divided_by: 2 | round %}
+{% assign collection           = collections[section.settings.collection] %}
+{% include 'include-item-per-row' %}
+
+<div id="ps-{{ section.id }}"
+     class="product-slider-section layout-{{_layout }} section-show-{{section.id}}"
+     data-section-type="product-grid"
+     data-section-id="{{section.id}}"
+     {% unless section.settings.background_color == blank %} style="background: {{section.settings.background_color}}"{% endunless %}>
+  {% if _layout == 'boxed' %}<div class="container">{% endif %}
+
+    {% include 'head-title' %}
+
+    {% unless section.settings.collection == blank or collection.products_count == 0 %}
+  <div class="row">
+    
+  <div class="sidebar {% if section.settings.layout == 'show_sidebar' %}col-md-4 col-lg-3{% endif %}"
+       style="{% if section.settings.layout == 'show_sidebar' %}display:block{% else %}display:none{% endif %}">
+    <div class="spcl-sale text-center">
+      <p class="offer-head">{{section.settings.offer-head}}</p>
+      <h1 class="off-sale1">{{section.settings.off}}<span>{{section.settings.off-sale}}</span></h1>
+      <p class="offer-text">{{section.settings.off-text}}</p>
+        {% unless section.settings.button_link == blank %}
+  <div class="button-link text-center">
+    <a class="side-button btn" href="{{ section.settings.button_link }}">
+
+      <span class="button-text">{{ section.settings.buttonText }}</span>
+    </a>
+  </div>
+  {% endunless %}
+    </div>
+    </div>
+  <div class="card-grid {% if section.settings.layout == 'show_sidebar' %}col-md-8 col-lg-9 sidbar{% else %}col-md-12{% endif %}">
+      <div class="product-slider-content {% if section.settings.layout == 'show_sidebar' %}transform{% endif %}" data-test="{{items_class}}">
+        <div class="padding-item-{{_padding_item}}{% if _type == 'row' %} row{% else %} ps-list owl-carousel ps-list-{{ section.id }}{% endif %}" {% include 'include-carousel-attr' %}>
+
+          {% if _type == 'row' %}
+            {% for block in section.blocks %}
+              {% if block.settings.position == '1' %}{% include 'include-special-block' with type: 'block' %}{% endif %}
+            {% endfor %}
+          {% endif %}
+
+          {% for product in collection.products limit: _total_items %}
+            {% assign index = forloop.index %}
+            {% if _type == 'row' %}<div class="products-grid-item {{ items_class }}">{% endif %}
+              {% include 'product-item' %}
+            {% if _type == 'row' %}</div>{% endif %}
+            {% if _type == 'row' %}
+              {% for block in section.blocks %}
+                {% if block.settings.position == '2' and index == middle_index %}
+                  {% include 'include-special-block' with type: 'block' %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+          {% endfor %}
+
+          {% if _type == 'row' %}
+            {% for block in section.blocks %}
+              {% if block.settings.position == '3' %}{% include 'include-special-block' with type: 'block' %}{% endif %}
+            {% endfor %}
+          {% endif %}
+        </div>        
+      </div>
+    </div></div>
+    {% else %}
+
+      <div class="product-slider-content">
+        <div class="row">
+          {% for i in (1.._item_per_row)  %}
+            <div class="{{ items_class }}">
+              <div class="product-wrapper">
+
+                <div class="product-head">
+                  <div class="product-image">
+
+                    <div class="featured-img">
+                      {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                      {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="product-content text-{{ section.settings.text_align }}">
+                  <div class="pc-inner">
+                    <h5 class="product-name">{{ 'homepage.onboarding.product_title' | t }}</h5>
+            
+	    {% comment %}
+		<div class="product-wishlist">
+		{% render 'flits_wishlist_snippet' with 'flits_collection_page_wsl_btn', product:product %}
+		</div>
+		{% endcomment %}
+
+ <div class="product-price"><span class="price">{{ 1999 | money }}</span></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    {% endunless %}
+
+  {% if _layout == 'boxed' %}</div>{% endif %}
+</div>
+{% schema %}
+{
+   "name":"Products Grid",
+   "settings":[
+    {
+      "id": "title1",
+      "type": "text",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "id": "head",
+      "type": "text",
+      "label": "Subheading",
+      "default": "have a look at"
+    },
+      {
+         "type":"paragraph",
+         "content":"Created by 'Products Grid' section"
+      },
+      {
+         "type":"text",
+         "id":"title",
+         "label":"Section Label",
+         "default":"Products Grid"
+      },
+      {
+         "type":"header",
+         "content":"LAYOUT"
+      },
+      {
+         "type":"checkbox",
+         "id":"boxed_layout",
+         "label":"Boxed layout",
+         "default":true
+      },
+      {
+         "type":"color",
+         "id":"background_color",
+         "label":"Background color",
+         "default":"#FFFFFF"
+      },
+      {
+         "type":"checkbox",
+         "id":"padding_item",
+         "label":"Padding items",
+         "default":true
+      },
+ {
+      "type": "select",
+      "id": "layout",
+      "label": {
+        "da": "Layout",
+        "de": "Layout",
+        "en": "Layout",
+        "es": "Diseño",
+        "fi": "Asettelu",
+        "fr": "Mise en page",
+        "hi": "लेआउट",
+        "it": "Layout",
+        "ja": "レイアウト",
+        "ko": "레이아웃",
+        "nb": "Oppsett",
+        "nl": "Opmaak",
+        "pt-BR": "Layout",
+        "pt-PT": "Esquema",
+        "sv": "Layout",
+        "th": "เลย์เอาต์",
+        "zh-CN": "布局",
+        "zh-TW": "版面配置"
+      },
+      "default": "hide_sidebar",
+      "options": [
+        {
+          "label": {
+            "en": "Hide Sidebar"
+          },
+          "value": "hide_sidebar"
+        },
+        {
+          "label": {
+            "en": "Show sidebar"
+          },
+          "value": "show_sidebar"
+        }
+      ]
+    },
+  {
+"type":"header",
+"content":"Sidebar Content/ Offer"
+  },
+      {
+         "type":"text",
+         "id":"offer-head",
+         "label":"Heading",
+         "default":"Special Offer"
+      },
+          {
+         "type":"text",
+         "id":"off",
+         "label":"offer in %",
+         "default":"50%"
+      },
+                {
+         "type":"text",
+         "id":"off-sale",
+         "label":"OFF",
+         "default":"OFF"
+      },
+          {
+         "type":"text",
+         "id":"off-text",
+         "label":"sale",
+         "default":"HOLIDAY SALE"
+      },
+      {
+"type":"url",
+"id":"button_link",
+"label":"Button Link"
+},
+{
+"type":"text",
+"id":"buttonText",
+"label":"Button Label",
+"default":"Shop Now"
+},
+  {
+"type":"header",
+"content":"Color & Fonts (Sidebar)"
+  },
+        {
+         "type":"color",
+         "id":"spcl-color",
+         "label":"Special Offer color",
+         "default":"#FFFFFF"
+      },
+             {
+         "type":"color",
+         "id":"spcl-bg-color",
+         "label":"Special Offer Backgroundcolor",
+         "default":"#133564"
+      },
+                   {
+         "type":"color",
+         "id":"off-color",
+         "label":" Offer text color",
+         "default":"#333333"
+      },
+                   {
+         "type":"color",
+         "id":"sale-color",
+         "label":" sale text color",
+         "default":"#666666"
+      },
+              {
+         "type":"color",
+         "id":"btn-color",
+         "label":"Button text color",
+         "default":"#333333"
+      },
+         {
+      "type": "range",
+      "id": "spcl-size",
+      "label": "Special offer base size",
+      "default": 18,
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px"
+    },
+     {
+      "type": "range",
+      "id": "off-size",
+      "label": "Offer text base size",
+      "default": 80,
+      "min": 30,
+      "max": 90,
+      "step": 5,
+      "unit": "px"
+    },
+         {
+      "type": "range",
+      "id": "off-span-size",
+      "label": "Offer span base size",
+      "default": 20,
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px"
+    },
+             {
+      "type": "range",
+      "id": "sale-size",
+      "label": "Sale base size",
+      "default": 16,
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px"
+    },
+             {
+      "type": "range",
+      "id": "btn-size",
+      "label": "Button base size",
+      "default": 16,
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px"
+    },
+      {
+         "type":"header",
+         "content":"Carousel settings"
+      },
+      {
+         "type":"checkbox",
+         "id":"carousel_layout",
+         "label":"Enable Carousel Layout"
+      },
+      {
+         "type":"checkbox",
+         "id":"autoplay",
+         "label":"Enable Autoplay"
+      },
+      {
+         "type":"checkbox",
+         "id":"loop",
+         "label":"Enable Loop"
+      },
+      {
+         "type":"checkbox",
+         "id":"nav",
+         "label":"Show Next & Prev arrows",
+         "default":true
+      },
+      {
+         "type":"checkbox",
+         "id":"dot",
+         "label":"Show Dots",
+         "default":false
+      },
+      {
+         "type":"header",
+         "content":"Heading content",
+         "info":"Blank to hide."
+      },
+      {
+         "type":"select",
+         "id":"heading_content_align",
+         "label":"Heading alignment",
+         "options":[
+            {
+               "value":"left",
+               "label":"Left"
+            },
+            {
+               "value":"center",
+               "label":"Center"
+            },
+            {
+               "value":"right",
+               "label":"Right"
+            }
+         ],
+         "default":"center"
+      },
+      {
+         "type":"text",
+         "id":"heading_text",
+         "label":"Heading",
+         "default":"Heading"
+      },
+      {
+         "type":"text",
+         "id":"subheading_text",
+         "label":"Subheading",
+         "default":"Subheading"
+      },
+      {
+         "type":"header",
+         "content":"LAYOUT CONTENT"
+      },
+      {
+         "type":"select",
+         "id":"text_align",
+         "label":"Text align for product content",
+         "options":[
+            {
+               "value":"left",
+               "label":"Left"
+            },
+            {
+               "value":"center",
+               "label":"Center"
+            },
+            {
+               "value":"right",
+               "label":"Right"
+            }
+         ],
+         "default":"left"
+      },
+      {
+         "id":"collection",
+         "type":"collection",
+         "label":"Collection item"
+      },
+       {
+          "type"  :"text",
+          "id"    :"items_resp",
+          "label":"Responsive number of items",
+          "placeholder": "xl,lg,md,sm,xs",
+          "info": "You can define the number of slides to display for various breakpoint settings. e.g. 4 items on desktop, 3 items on tablet and 2 items on mobile. Input: 4,3,2. [Read more](https:\/\/help.arenacommerce.com\/customization\/grid.html)",
+          "default": "2,1"
+       },
+      {
+         "type":"range",
+         "id":"total_items",
+         "label":"Total items",
+         "default":12,
+         "min":1,
+         "max":30,
+         "step":1
+      }
+   ],
+   "blocks":[
+      {
+         "type":"product",
+         "name":"Big Product",
+         "settings":[
+            {
+               "type":"paragraph",
+               "content":"Only for type 'Row"
+            },
+            {
+               "type":"select",
+               "id":"position",
+               "label":"Position",
+               "default":"1",
+               "options":[
+                  {
+                     "value":"1",
+                     "label":"First"
+                  },
+                  {
+                     "value":"2",
+                     "label":"Middle"
+                  },
+                  {
+                     "value":"3",
+                     "label":"Last"
+                  }
+               ]
+            },
+            {
+               "type":"range",
+               "id":"width",
+               "label":"Width on Desktop",
+               "min":0,
+               "max":12,
+               "step":1,
+               "unit":"/12",
+               "default":4,
+               "info":"0 to Hide"
+            },
+            {
+               "type":"range",
+               "id":"width_mobile",
+               "label":"Width on Mobile",
+               "min":0,
+               "max":12,
+               "step":1,
+               "unit":"/12",
+               "default":2,
+               "info":"0 to Hide"
+            },
+            {
+               "type":"product",
+               "id":"bproduct",
+               "label":"Product"
+            },
+            {
+               "type":"select",
+               "id":"image_height",
+               "label":"Image Height",
+               "default":"auto",
+               "options":[
+                  {
+                     "value":"auto",
+                     "label":"Auto"
+                  },
+                  {
+                     "value":"fill",
+                     "label":"Fill"
+                  }
+               ]
+            },
+            {
+               "type":"text",
+               "id":"b_title",
+               "label":"Title",
+               "default":"Daily deal"
+            },
+            {
+               "type":"text",
+               "id":"b_subtitle",
+               "label":"Subtitle",
+               "default":"end in:"
+            },
+            {
+               "type":"text",
+               "id":"countdown",
+               "label":"Date countdown",
+               "placeholder":"MM/DD/YYYY"
+            }
+         ]
+      },
+      {
+         "type":"image",
+         "name":"Big Image",
+         "settings":[
+            {
+               "type":"paragraph",
+               "content":"Only for type 'Row"
+            },
+            {
+               "type":"select",
+               "id":"position",
+               "label":"Position",
+               "default":"1",
+               "options":[
+                  {
+                     "value":"1",
+                     "label":"First"
+                  },
+                  {
+                     "value":"2",
+                     "label":"Middle"
+                  },
+                  {
+                     "value":"3",
+                     "label":"Last"
+                  }
+               ]
+            },
+            {
+               "type":"range",
+               "id":"width",
+               "label":"Width on Desktop",
+               "min":0,
+               "max":12,
+               "step":1,
+               "unit":"/12",
+               "default":4,
+               "info":"0 to Hide"
+            },
+            {
+               "type":"range",
+               "id":"width_mobile",
+               "label":"Width on Mobile",
+               "min":0,
+               "max":12,
+               "step":1,
+               "unit":"/12",
+               "default":2,
+               "info":"0 to Hide"
+            },
+            {
+               "type":"image_picker",
+               "id":"image",
+               "label":"Image"
+            },
+            {
+               "type":"url",
+               "id":"link",
+               "label":"Image link",
+               "default":"/collections"
+            },
+            {
+               "type":"select",
+               "id":"image_height",
+               "label":"Image Height",
+               "default":"auto",
+               "options":[
+                  {
+                     "value":"auto",
+                     "label":"Auto"
+                  },
+                  {
+                     "value":"fill",
+                     "label":"Fill"
+                  }
+               ]
+            },
+            {
+               "type":"text",
+               "id":"b_title",
+               "label":"Title",
+               "default":"Daily deal"
+            },
+            {
+               "type":"text",
+               "id":"b_subtitle",
+               "label":"Subtitle",
+               "default":"end in:"
+            },
+            {
+               "type":"text",
+               "id":"countdown",
+               "label":"Date countdown",
+               "placeholder":"MM/DD/YYYY"
+            },
+            {
+               "type":"text",
+               "id":"button_text",
+               "label":"Button label"
+            },
+            {
+               "type":"url",
+               "id":"button_link",
+               "label":"Button link"
+            }
+         ]
+      }
+   ],
+   "presets":[
+      {
+         "name":"Products Grid",
+         "category":"Collection"
+      }
+   ]
+}
+{% endschema %}

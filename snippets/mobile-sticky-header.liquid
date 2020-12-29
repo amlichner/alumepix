@@ -1,0 +1,55 @@
+<style>
+#navbar1 {
+border: 1px solid rgba(117,144,169,.25);
+    padding:  0;
+  position: fixed;
+  top: -200px;
+  width: 100%;
+  display: block;
+  transition: top 0.3s;
+  left:0;
+}
+  @media (min-width:768px){
+    #navbar1{display:none;
+    }
+  }
+</style>
+
+
+<div class="header-main" id ="navbar1">
+      <div class="table-row">
+        {% include 'include-logo' with type: 'mobile' %}
+         <div class="header-navigation-mobile">
+    {% include 'navigation-mobile' with header_style: _header_mobile %}
+    {%- unless template contains 'customer' -%}
+    {% if shop.customer_accounts_enabled or settings.enable_product_wishlist %}
+      <div class="popup-icons popup-icons-mobile hide">
+        {% include 'include-popup', type: 'account' %}
+      </div>
+    {% endif %}
+    {%- endunless -%}
+  </div>
+
+        <div class="header-mobile--bottom-content">
+    
+
+          {% include 'include-list-icons' with type: 'cart' %}
+                {% include 'include-list-icons' with type: 'navbar' %}
+        </div>
+      </div>
+    </div>
+<!-- 
+<script>
+// When the user scrolls down 20px from the top of the document, slide down the navbar
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+     if ($(window).scrollTop() >= 300) {
+ 
+    document.getElementById("navbar1").style.top = "0px";
+  } else {
+    document.getElementById("navbar1").style.top = "-200px";
+  }
+}
+
+</script> -->

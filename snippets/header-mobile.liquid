@@ -1,0 +1,67 @@
+{%- case header_style -%}
+  {%- when 1 -%}
+    <div class="header-main">
+      <div class="table-row">
+        {% include 'include-list-icons' with type: 'navbar' %}
+        {% include 'include-logo' with type: 'mobile' %}
+
+        <div class="header-mobile--right-content">
+          <div class="search-icon search-{{search_type}}{% if search_type == 'popup' and template == 'index' %} hide{% endif %}">
+            <a href="javascript:void(0);">
+              {% include 'include-list-icons', type: 'icon_type', f: 'search' %}
+            </a>
+          </div>
+          {% include 'include-list-icons' with type: 'curr_lang' %}
+          {% include 'include-list-icons' with type: 'account_popup' %}
+          {% include 'include-list-icons' with type: 'cart' %}
+        </div>
+      </div>
+    </div>
+    {%- if settings.show_search -%}      
+    <div class="searchbox mobile-searchbox{% if settings.search_type == 'drawer' %} hide{% endif %}">{% include 'layer-search-modal' ,type: 'search_template'  %}</div>
+    {%- endif -%}
+
+
+  {%- when 2 -%}
+    <div class="header-main">
+      <div class="table-row">
+        {% include 'include-logo' with type: 'mobile' %}
+        {%- if settings.show_search -%}
+        <div class="searchbox mobile-searchbox{% if settings.search_type == 'drawer' %} hide{% endif %}">{% include 'layer-search-modal' ,type: 'search_template'  %}</div>
+        {%- endif -%}
+
+        <div class="header-mobile--bottom-content">
+          {% include 'include-list-icons' with type: 'navbar' %}
+          {% include 'include-list-icons' with type: 'curr_lang' %}
+          {% include 'include-list-icons' with type: 'account' %}
+          {% include 'include-list-icons' with type: 'cart' %}
+        </div>
+      </div>
+    </div>
+
+
+  {%- when 3 -%}
+    <div class="header-main">
+      <div class="table-row">
+        {% include 'include-list-icons' with type: 'navbar' %}
+        {% include 'include-logo' with type: 'mobile' %}
+
+        <div class="header-mobile--right-content">
+          <div class="search-icon search-{{search_type}}{% if search_type == 'popup' and template == 'index' %} hide{% endif %}">
+            <a href="javascript:void(0);">{% include 'include-list-icons', type: 'icon_type', f: 'search' %}</a>
+          </div>
+
+          {% include 'include-list-icons' with type: 'cart' %}
+        </div>
+      </div>
+    </div>
+  
+    {%- if settings.show_search -%}
+    <div class="searchbox mobile-searchbox{% if settings.search_type == 'drawer' %} hide{% endif %}">{% include 'layer-search-modal' ,type: 'search_template'  %}</div>
+    {%- endif -%}
+
+  {%- else -%}
+{%- endcase -%}
+  {% if section.settings.mobile_show_sticky_bar %}
+        {% include 'mobile-sticky-header' with header_style: _header_mobile %}
+      {% endif %}

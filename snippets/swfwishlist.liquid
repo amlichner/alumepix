@@ -1,0 +1,15 @@
+{{ 'https://shoptell.io/livechat/assets/js/initscript-min.js' | script_tag }} 
+{% if shop.customer_accounts_enabled %} 
+ {% if customer %} 
+ <div class='swf_customer_info' id='{{ customer.id }}' customer_name='{{ customer.name }}' email='{{ customer.email }}' style='display: none;'></div> 
+ {% else %} 
+ <div class='swf_customer_info_enabled' style='display: none;'></div> 
+ {% endif %} 
+ {% else %} 
+ <div class='swf_customer_info_disabled' style='display: none;'></div> 
+ {% endif %} 
+ <div class='swf_currency_info' style='display: none'>{{ 0 | money_with_currency }}</div> 
+ {% if product.id.size > 0 %} <div class='add_to_wish_list_icon_from_add_to_cart' href='{{ product.url }}' id='{{ product.id }}' title='{{ product.title}}' price='{{ product.price }}' variant_id='{{ product.variants.first.id }}' new_featured_image='{{ product | img_url: '1024x' }}' style='display:none;'></div> <div class='from_add_to_cart_title' style='display:none;'> {{ product.title }} </div> <div class='from_add_to_cart_price' style='display:none;'> {{ product.price }} </div> <div class='from_add_to_cart_description' style='display:none;'> {{ product.description }} </div> <div class='from_add_to_cart_new_featured_image' style='display:none;'> {{ product | img_url: '1024x' }} </div> {% for _variant in product.variants %} <div class='from_add_to_cart_variant_{{ _variant.id }}' style='display:none;'> {{ _variant | json }} </div> {% endfor %} {% endif %} 
+
+ {% if settings.logo %}
+ <div class='swf_store_info' style='display: none;' url='{{ settings.logo | img_url | img_tag: shop.name }}' >{{ '' | customer_login_link }}</div>  {% else %} <div class='swf_store_logo' url='https://shoptell.s3-us-west-2.amazonaws.com/public/noimg.png' style='display: none;'>{{ '' | customer_login_link }}</div> {% endif %}

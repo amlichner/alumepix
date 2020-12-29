@@ -1,0 +1,93 @@
+<style>
+  .popup-icons {
+    display: none;
+}
+  li.m-customer-account:hover .popup-icons {
+    display: block;
+  }
+</style>
+{%- assign show_search  = section.settings.search -%}
+{%- assign show_cart    = section.settings.cart -%}
+{%- assign show_account = section.settings.account -%}
+{%- assign show_popup   = section.settings.show_popup -%}
+{%- assign search_type  = settings.search_type -%}
+
+{%- if show_search or show_account or show_popup or show_cart -%}
+  <ul class="list-inline sticky">
+    {% if section.settings.search and settings.show_search %}
+    <li>
+            <div class="searchbox new" id="header-search">{% include 'layer-search-modal1' ,type: 'search_template'  %}</div>
+  
+    </li>
+    {% endif %}
+
+       {%- if show_cart -%}
+      <li class="top-cart-holder{% if settings.cart_styles == 'dropdown' %} hover-dropdown{% endif %}">
+        <div class="cart-target">
+          {% if settings.cart_styles == 'dropdown' %}
+            <a href="javascript:void(0);" class="basket dropdown-toggle" title="{{ 'general.header.cart_info.title' | t }}">
+              {% include 'include-list-icons', type: 'icon_type', f: 'cart' %}
+              <span class="number"><span class="n-item">{{ cart.item_count }}</span></span>
+             
+            </a>
+            {% unless template contains 'cart' %}
+              <div class="cart-dd">
+                <form action="/cart" method="post">
+                  <div id="cart-info">
+                    <div id="cart-content" class="cart-content">
+                      <div class="loading"></div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            {% endunless %}
+          {% else %}
+            <a href="javascript:void(0);" class="basket cart-toggle" title="{{ 'general.header.cart_info.title' | t }}">
+              {% include 'include-list-icons', type: 'icon_type', f: 'cart' %}
+              <span class="number"><span class="n-item">{{ cart.item_count }}</span></span>
+            </a>
+          {% endif %}
+
+        </div>
+      </li>
+    {%- endif -%}
+   {%- if show_account -%}
+      <li class="m-customer-account">
+        {% include 'include-list-icons', type: 'icon_type', f: 'account' %}
+
+        <div class="popup-icons sticky">
+          {% if shop.customer_accounts_enabled %}
+            {% if customer %}
+              <div class="account-login">
+                <a href="/account">{{ 'general.header.account_with_name' | t: name: customer.first_name }}</a>
+              </div>
+            {% else %}
+              <div class="account-signin">
+                <a href="/account/login">{{ 'general.header.signin' | t }}</a>
+              </div>
+              <div class="account-signup">
+                <a href="/account/register">{{ 'general.header.signup' | t }}</a>
+              </div>
+            {% endif %}
+          {% endif %}
+
+          {% if shop.customer_accounts_enabled and customer %}
+            <div class="account-logout">
+              <a href="/account/logout">{{ 'general.header.logout' | t }}</a>
+            </div>
+          {% endif %}
+        </div>
+      </li>
+    {%- endif -%}
+    {%- if show_popup -%}
+      <li>
+        <div class="topbar-popup currency-{{settings.flag_currency}}">
+          <span class="topbar-config">{% include 'include-list-icons', type: 'icon_type', f: 'currency' %}</span>
+        </div>
+      </li>
+    {%- endif -%}
+
+
+
+  </ul>
+{%- endif -%}
